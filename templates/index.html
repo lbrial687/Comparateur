@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Comparateur de Vols NC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            max-width: 500px;
+        }
+
+        .header h1 {
+            color: #0284c7;
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .header p {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-top: 6px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 25px 20px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            border: 1px solid #e2e8f0;
+        }
+
+        .type-vol-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 15px;
+        }
+
+        .radio-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .radio-group input[type="radio"] {
+            accent-color: #0284c7;
+            width: 18px;
+            height: 18px;
+        }
+
+        .radio-group label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #334155;
+            cursor: pointer;
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .villes-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        select, input[type="date"] {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            font-size: 1rem;
+            color: #0f172a;
+            background-color: #f8fafc;
+            outline: none;
+            transition: all 0.2s ease;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        select:focus, input[type="date"]:focus {
+            border-color: #0284c7;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+        .btn-swap {
+            background-color: #e0f2fe;
+            color: #0284c7;
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            align-self: center;
+            transition: background 0.2s;
+            margin: -4px 0;
+            z-index: 2;
+        }
+
+        .btn-swap:active {
+            transform: scale(0.95);
+            background-color: #bae6fd;
+        }
+
+        .planning-vols {
+            margin-top: -4px;
+            margin-bottom: 12px;
+            padding: 10px 14px;
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            color: #0369a1;
+            display: none;
+        }
+
+        .planning-vols .compagnies {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        .btn-search {
+            width: 100%;
+            background-color: #0284c7;
+            color: #ffffff;
+            border: none;
+            padding: 16px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+        }
+
+        .btn-search:active {
+            transform: scale(0.98);
+            background-color: #0369a1;
+        }
+
+        .info-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 18px;
+            width: 100%;
+            max-width: 500px;
+            margin-top: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .info-card h3 {
+            font-size: 0.95rem;
+            color: #0284c7;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .info-card p {
+            font-size: 0.85rem;
+            color: #64748b;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>✈️ Comparateur de Vols NC</h1>
+        <p>Comparez les tarifs en temps réel au départ et à destination de La Tontouta</p>
+    </div>
+
+    <div class="card">
+        <form action="/search" method="get" id="flightForm" onsubmit="return validateForm()">
+            
+            <div class="type-vol-container">
+                <div class="radio-group">
+                    <input type="radio" id="roundtrip" name="trip_type" value="roundtrip" {% if saved_trip_type != 'oneway' %}checked{% endif %} onclick="toggleReturnDate(true)">
+                    <label for="roundtrip">Aller-retour</label>
+                </div>
+                <div class="radio-group">
+                    <input type="radio" id="oneway" name="trip_type" value="oneway" {% if saved_trip_type == 'oneway' %}checked{% endif %} onclick="toggleReturnDate(false)">
+                    <label for="oneway">Vol simple</label>
+                </div>
+            </div>
+
+            <div class="villes-wrapper">
+                <div class="form-group">
+                    <label for="origin">Départ</label>
+                    <select id="origin" name="origin" required>
+                        <option value="NOU" {% if saved_origin == 'NOU' %}selected{% endif %}>Nouméa - La Tontouta (NOU)</option>
+                        <option value="SYD" {% if saved_origin == 'SYD' %}selected{% endif %}>Sydney (SYD)</option>
+                        <option value="BNE" {% if saved_origin == 'BNE' %}selected{% endif %}>Brisbane (BNE)</option>
+                        <option value="AKL" {% if saved_origin == 'AKL' %}selected{% endif %}>Auckland (AKL)</option>
+                        <option value="PPT" {% if saved_origin == 'PPT' %}selected{% endif %}>Papeete (PPT)</option>
+                        <option value="NAN" {% if saved_origin == 'NAN' %}selected{% endif %}>Nadi (NAN)</option>
+                        <option value="VLI" {% if saved_origin == 'VLI' %}selected{% endif %}>Port-Vila (VLI)</option>
+                        <option value="WLS" {% if saved_origin == 'WLS' %}selected{% endif %}>Wallis (WLS)</option>
+                        <option value="SIN" {% if saved_origin == 'SIN' %}selected{% endif %}>Singapour (SIN)</option>
+                        <option value="BKK" {% if saved_origin == 'BKK' %}selected{% endif %}>Bangkok (BKK)</option>
+                    </select>
+                </div>
+
+                <button type="button" class="btn-swap" onclick="swapCities()" title="Inverser départ et destination">⇅</button>
+
+                <div class="form-group">
+                    <label for="destination">Destination</label>
+                    <select id="destination" name="destination" required onchange="afficherPlanning()">
+                        <option value="SYD" {% if saved_destination == 'SYD' %}selected{% endif %}>Sydney (SYD)</option>
+                        <option value="BNE" {% if saved_destination == 'BNE' %}selected{% endif %}>Brisbane (BNE)</option>
+                        <option value="AKL" {% if saved_destination == 'AKL' %}selected{% endif %}>Auckland (AKL)</option>
+                        <option value="PPT" {% if saved_destination == 'PPT' %}selected{% endif %}>Papeete (PPT)</option>
+                        <option value="NAN" {% if saved_destination == 'NAN' %}selected{% endif %}>Nadi (NAN)</option>
+                        <option value="VLI" {% if saved_destination == 'VLI' %}selected{% endif %}>Port-Vila (VLI)</option>
+                        <option value="WLS" {% if saved_destination == 'WLS' %}selected{% endif %}>Wallis (WLS)</option>
+                        <option value="SIN" {% if saved_destination == 'SIN' %}selected{% endif %}>Singapour (SIN)</option>
+                        <option value="BKK" {% if saved_destination == 'BKK' %}selected{% endif %}>Bangkok (BKK)</option>
+                        <option value="NOU" {% if saved_destination == 'NOU' %}selected{% endif %}>Nouméa - La Tontouta (NOU)</option>
+                    </select>
+                </div>
+
+                <div id="planning-vols" class="planning-vols">
+                    <strong>Jours de vol :</strong> <span id="planning-jours"></span>
+                    <div class="compagnies" id="planning-compagnies"></div>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 12px;">
+                <label for="departure_date">Date Aller</label>
+                <input type="date" id="departure_date" name="departure_date" required onchange="updateMinReturnDate()">
+            </div>
+
+            <div class="form-group" id="return_date_group">
+                <label for="return_date">Date Retour</label>
+                <input type="date" id="return_date" name="return_date">
+            </div>
+
+            <button type="submit" class="btn-search">Rechercher les vols</button>
+        </form>
+    </div>
+
+    <div class="info-card">
+        <h3>📍 Liaisons La Tontouta (NOU)</h3>
+        <p>Les vols directs au départ de la Nouvelle-Calédonie sont principalement desservis par Aircalin, Qantas, Air New Zealand, Air Calédonie et Fiji Airways.</p>
+    </div>
+
+    <script>
+        // Planning hebdomadaire des vols, transmis depuis app.py (route_schedule.py)
+        const PLANNING_VOLS = {{ route_schedule_json | safe }};
+
+        function afficherPlanning() {
+            const destination = document.getElementById('destination').value;
+            const encart = document.getElementById('planning-vols');
+            const planning = PLANNING_VOLS[destination];
+
+            if (!planning) {
+                encart.style.display = 'none';
+                return;
+            }
+
+            document.getElementById('planning-jours').textContent = planning.jours.join(', ');
+            document.getElementById('planning-compagnies').textContent = planning.compagnies;
+            encart.style.display = 'block';
+        }
+
+        function toggleReturnDate(show) {
+            const returnGroup = document.getElementById('return_date_group');
+            const returnInput = document.getElementById('return_date');
+            if (show) {
+                returnGroup.style.display = 'flex';
+                returnInput.required = true;
+            } else {
+                returnGroup.style.display = 'none';
+                returnInput.required = false;
+                returnInput.value = '';
+            }
+        }
+
+        function swapCities() {
+            const originSelect = document.getElementById('origin');
+            const destSelect = document.getElementById('destination');
+            const temp = originSelect.value;
+            originSelect.value = destSelect.value;
+            destSelect.value = temp;
+            afficherPlanning();
+        }
+
+        function updateMinReturnDate() {
+            const depDate = document.getElementById('departure_date').value;
+            const retInput = document.getElementById('return_date');
+            if (depDate) {
+                retInput.min = depDate;
+                if (retInput.value && retInput.value < depDate) {
+                    retInput.value = depDate;
+                }
+            }
+        }
+
+        function validateForm() {
+            const origin = document.getElementById('origin').value;
+            const destination = document.getElementById('destination').value;
+
+            if (origin === destination) {
+                alert("La ville de départ et la destination doivent être différentes.");
+                return false;
+            }
+            return true;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0];
+            const depInput = document.getElementById('departure_date');
+            const retInput = document.getElementById('return_date');
+
+            depInput.min = todayStr;
+
+            {% if saved_departure_date %}
+                depInput.value = "{{ saved_departure_date }}";
+            {% else %}
+                const departure = new Date();
+                departure.setDate(today.getDate() + 14);
+                depInput.value = departure.toISOString().split('T')[0];
+            {% endif %}
+
+            retInput.min = depInput.value;
+
+            {% if saved_return_date %}
+                retInput.value = "{{ saved_return_date }}";
+            {% else %}
+                const returnDate = new Date();
+                returnDate.setDate(today.getDate() + 28);
+                retInput.value = returnDate.toISOString().split('T')[0];
+            {% endif %}
+
+            if ("{{ saved_trip_type }}" === "oneway") {
+                toggleReturnDate(false);
+            }
+
+            afficherPlanning();
+        });
+    </script>
+</body>
+</html>

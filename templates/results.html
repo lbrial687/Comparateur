@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultats de recherche - Comparateur NC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .header h2 {
+            font-size: 1.2rem;
+            color: #0284c7;
+            font-weight: 700;
+        }
+
+        .btn-back {
+            text-decoration: none;
+            color: #0284c7;
+            background-color: #e0f2fe;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .btn-back:hover {
+            background-color: #bae6fd;
+        }
+
+        .dates-summary {
+            background-color: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #0369a1;
+            font-size: 0.88rem;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(2, 132, 199, 0.05);
+        }
+
+        .dates-summary .calendar-icon {
+            font-size: 1rem;
+        }
+
+        .card-flight {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .airline {
+            font-weight: 700;
+            color: #0f172a;
+            font-size: 1.05rem;
+        }
+
+        .price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0284c7;
+        }
+
+        .note-prix {
+            font-size: 0.72rem;
+            color: #94a3b8;
+            text-align: right;
+            margin-top: 2px;
+        }
+
+        .slice-info {
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 12px;
+            margin-top: 10px;
+            font-size: 0.88rem;
+            color: #475569;
+        }
+
+        .slice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .time {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .badge {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .details-sub {
+            font-size: 0.78rem;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        .btn-book {
+            display: block;
+            text-align: center;
+            background-color: #0284c7;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 14px;
+            text-decoration: none;
+            transition: background 0.2s;
+            box-shadow: 0 2px 4px rgba(2, 132, 199, 0.2);
+        }
+
+        .btn-book:active {
+            background-color: #0369a1;
+        }
+
+        .no-results {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 30px 20px;
+            text-align: center;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .no-results p {
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <a href="/?origin={{ origin }}&destination={{ destination }}&trip_type={{ trip_type }}&departure_date={{ departure_date }}&return_date={{ return_date }}" class="btn-back">← Retour</a>
+            <h2>{{ origin }} ➔ {{ destination }}</h2>
+        </div>
+
+        {% if formatted_dep_date %}
+            <div class="dates-summary">
+                <span class="calendar-icon">📅</span>
+                <span>
+                    {% if formatted_ret_date %}
+                        {{ formatted_dep_date }} — {{ formatted_ret_date }}
+                    {% else %}
+                        Aller le {{ formatted_dep_date }} (Vol simple)
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+
+        {% if results %}
+            {% for item in results %}
+                <div class="card-flight">
+                    <div class="card-top">
+                        <div class="airline">✈️ {{ item.airline }}</div>
+                        <div>
+                            <div class="price">{{ item.price }}</div>
+                            {% if item.note_prix %}
+                                <div class="note-prix">{{ item.note_prix }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% for slice in item.slices %}
+                        <div class="slice-info">
+                            <div class="slice-header">
+                                <div>
+                                    <span class="time">{{ slice.depart_heure }}</span> {{ slice.depart_code }} ➔ <span class="time">{{ slice.arrivee_heure }}</span> {{ slice.arrivee_code }}
+                                </div>
+                                <div>
+                                    <span>{{ slice.duree_totale }}</span>
+                                    <span class="badge">{% if slice.escales == 0 %}Direct{% else %}{{ slice.escales }} escale(s){% endif %}</span>
+                                </div>
+                            </div>
+
+                            {% for seg in slice.segments %}
+                                <div class="details-sub">
+                                    Vol {{ seg.vol_numero }} • {{ seg.operateur }} ({% if seg.avion %}{{ seg.avion }}{% else %}A320neo{% endif %})
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <a href="{{ item.booking_url }}" target="_blank" rel="noopener noreferrer" class="btn-book">
+                        Comparer et réserver ↗
+                    </a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-results">
+                <p>Aucun vol trouvé pour ces critères.</p>
+                <a href="/" class="btn-back">Nouvelle recherche</a>
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>
